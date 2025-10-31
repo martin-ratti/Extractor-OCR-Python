@@ -1,0 +1,7 @@
+Pillow
+pytesseract
+opencv-python
+numpy
+customtkinter
+pyinstaller
+tkinterdnd2
