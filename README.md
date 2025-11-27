@@ -4,6 +4,7 @@
 
 <img src="https://img.shields.io/badge/Estado-Estable-success?style=for-the-badge&logo=check&logoColor=white" alt="Estado Badge"/>
 <img src="https://img.shields.io/badge/Versión-2.0.0-blue?style=for-the-badge" alt="Version Badge"/>
+<img src="https://img.shields.io/badge/Licencia-MIT-green?style=for-the-badge" alt="License Badge"/>
 
 <br/>
 
@@ -15,10 +16,10 @@
 
 <p>
     <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Badge"/>
+    <img src="https://img.shields.io/badge/Arquitectura-Clean%20Arch-orange?style=for-the-badge&logo=expertsexchange&logoColor=white" alt="Clean Arch Badge"/>
     <img src="https://img.shields.io/badge/GUI-CustomTkinter-2B2B2B?style=for-the-badge&logo=tkinter&logoColor=white" alt="CustomTkinter Badge"/>
     <img src="https://img.shields.io/badge/CV-OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" alt="OpenCV Badge"/>
     <img src="https://img.shields.io/badge/OCR-Tesseract-blue?style=for-the-badge&logo=googlelens&logoColor=white" alt="Tesseract Badge"/>
-    <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows Badge"/>
 </p>
 
 </div>
@@ -27,72 +28,95 @@
 
 ## 🎯 Objetivo y Alcance
 
-El **Extractor de Texto OCR** es una herramienta de escritorio diseñada para automatizar la digitalización de información. Su función principal es detectar y extraer texto específicamente de **áreas resaltadas** en documentos o imágenes escaneadas.
+El **Extractor de Texto OCR** es una herramienta de escritorio profesional diseñada para automatizar la digitalización de información selectiva. A diferencia de los OCR tradicionales que escanean toda la página, esta herramienta utiliza visión artificial para detectar y extraer texto **únicamente de las áreas resaltadas**.
 
-Ideal para estudiantes y profesionales que necesitan procesar apuntes, libros o informes. La aplicación combina la potencia de **Tesseract OCR** con procesamiento de imágenes avanzado mediante **OpenCV**, todo envuelto en una interfaz moderna y amigable.
+Ideal para estudiantes, investigadores y abogados que trabajan con documentos físicos marcados con resaltadores estándar.
+
+> **Colores Soportados:** 🟨 Amarillo | 🟩 Verde | 🌸 Rosa | 🟣 Violeta
 
 ---
 
-## ⚙️ Stack Tecnológico & Arquitectura
+## 🏛️ Arquitectura y Diseño (Clean Architecture)
 
-El proyecto sigue los principios de **Clean Architecture** para separar la lógica de procesamiento de la interfaz visual.
+Este proyecto no es solo un script; está construido siguiendo estrictamente los principios de **Clean Architecture** y **SOLID**, garantizando que la lógica de negocio sea independiente de la interfaz gráfica y de las librerías externas.
 
-| Capa / Componente | Tecnología / Ruta | Descripción |
+### Diagrama de Capas
+
+| Capa | Ruta | Responsabilidad |
 | :--- | :--- | :--- |
-| **Interface (GUI)** | `src/interface/`<br>_(CustomTkinter + TkinterDnD)_ | Interfaz moderna "Green & Pink". Soporta *Drag & Drop* de archivos y carpetas, visualización de imágenes y edición de texto. |
-| **Core (Lógica)** | `src/core/` | Define los protocolos y casos de uso para la extracción, independiente de la librería OCR usada. |
-| **Infrastructure** | `src/infrastructure/`<br>_(OpenCV + Pytesseract)_ | Implementación concreta del OCR. Aplica filtros HSV para detectar colores (Amarillo, Verde, Rosa, Violeta) y máscaras binarias. |
-| **Empaquetado** | PyInstaller | Generación del ejecutable `.exe` portable con assets incrustados. |
+| **Interface** | `src/interface/gui.py` | **Presentación:** Maneja la ventana, eventos *Drag & Drop*, hilos de ejecución y feedback visual. No conoce la lógica del OCR. |
+| **Core** | `src/core/use_cases.py` | **Dominio:** Define *qué* debe hacer el sistema (Casos de Uso) y los *Protocolos* (Interfaces) que debe cumplir la infraestructura. Es Python puro. |
+| **Infrastructure** | `src/infrastructure/ocr_service.py` | **Implementación:** Contiene la "suciedad" técnica: OpenCV, máscaras de color HSV y llamadas a binarios de Tesseract. |
 
----
+-----
 
 ## 🚀 Características Principales
 
-* **🔍 OCR Inteligente por Color:** Algoritmo capaz de aislar y extraer texto resaltado en **Amarillo, Verde, Rosa o Violeta**.
-* **📂 Procesamiento por Lotes:** Arrastra una carpeta entera para analizar múltiples imágenes automáticamente.
-* **✍️ Herramientas de Edición:**
-    * **Limpieza:** Elimina saltos de línea erróneos típicos del OCR.
-    * **Copia Rápida:** Copia el resultado al portapapeles con un clic.
-* **🖼️ Previsualización Dinámica:** Visualiza la imagen cargada y limpia la selección fácilmente.
-* **💾 Exportación Flexible:** Guarda los resultados en `.txt` individualmente o de forma masiva.
+  * **🔍 Algoritmo de Visión Artificial:** Utiliza rangos HSV específicos para crear máscaras binarias que aíslan el texto resaltado del resto del documento.
+  * **🎨 UI "Green & Pink":** Interfaz moderna basada en `CustomTkinter` con modo claro, tooltips nativos y feedback de progreso.
+  * **🖱️ Drag & Drop Nativo:** Soporte completo mediante `TkinterDnD` para arrastrar archivos o carpetas enteras.
+  * **⚡ Procesamiento por Lotes (Multithreading):** La interfaz no se congela al procesar carpetas grandes gracias al manejo de hilos y colas de eventos.
+  * **🛠️ Herramientas de Post-Procesado:**
+      * **Limpieza Inteligente:** Algoritmo para reconstruir párrafos rotos por el OCR.
+      * **Auto-detect Tesseract:** El sistema busca automáticamente el binario de Tesseract en rutas comunes y relativas.
 
----
+-----
 
 ## 📋 Requisito Crítico: Tesseract OCR
 
-> ⚠️ **Atención:** Para que la aplicación funcione, el motor OCR debe estar presente.
+> ⚠️ **Atención:** Esta aplicación requiere el motor **Tesseract OCR** para interpretar los caracteres.
 
-### Opción A: Modo Portable (Recomendado)
-Esta opción permite que la app funcione en cualquier PC sin instalaciones previas.
-1.  Descarga Tesseract Portable desde [UB Mannheim](https://github.com/UB-Mannheim/tesseract/wiki).
-2.  Descomprime y renombra la carpeta a `Tesseract-OCR`.
-3.  Coloca esa carpeta **en el mismo directorio** donde esté el archivo `ExtractorOCR.exe` (o `main.py`).
+### Opción A: Modo Portable (Recomendado ⭐)
+
+Esta opción hace que la app sea totalmente portable (USB, Nube, etc).
+
+1.  Descarga **Tesseract Portable** (v5.x o superior).
+2.  Extrae el contenido y renombra la carpeta a `Tesseract-OCR`.
+3.  Coloca dicha carpeta **en el mismo directorio** donde está `ExtractorOCR.exe`.
 
 ### Opción B: Instalación en Sistema
-1.  Instala Tesseract en Windows mediante el instalador oficial.
-2.  La aplicación buscará automáticamente en rutas estándar como `C:\Program Files\Tesseract-OCR`.
 
----
+1.  Instala Tesseract en Windows ([Instalador Oficial UB Mannheim](https://github.com/UB-Mannheim/tesseract/wiki)).
+2.  La aplicación buscará automáticamente en:
+      * `C:\Program Files\Tesseract-OCR\tesseract.exe`
+      * `C:\Program Files (x86)\Tesseract-OCR\tesseract.exe`
+
+-----
 
 ## 🛠️ Modo de Uso
 
 ```text
 /Tu Carpeta
-├── ExtractorOCR.exe         <-- La aplicación
-└── Tesseract-OCR/           <-- Carpeta del motor OCR (Opción A)
-````
+├── ExtractorOCR.exe         <-- Ejecutable
+├── assets/                  <-- Iconos (Requerido)
+└── Tesseract-OCR/           <-- Motor OCR (Opcional si está instalado en sistema)
+```
 
-1.  **Iniciar:** Ejecuta `ExtractorOCR.exe`.
-2.  **Cargar:** Arrastra una imagen o carpeta a la ventana principal.
-3.  **Configurar:** Selecciona el color del resaltador (ej. "Amarillo") en el menú superior.
-4.  **Procesar:** Haz clic en **"Extraer Texto"**.
-5.  **Gestionar:** Usa los botones laterales para limpiar el formato, copiar o guardar el texto extraído.
+1.  **Abrir:** Ejecuta la aplicación.
+2.  **Cargar:** Arrastra una imagen o selecciona una carpeta completa.
+3.  **Configurar:** Elige el color del resaltador que usaste en el papel (ej. "Amarillo").
+4.  **Extraer:** Pulsa el botón y espera a que la barra de progreso termine.
+5.  **Exportar:** Puedes copiar al portapapeles o guardar en `.txt` masivamente.
+
+-----
+
+## ❓ Solución de Problemas (Troubleshooting)
+
+**Error: "No se encontró Tesseract"**
+
+  * Verifica que la carpeta se llame exactamente `Tesseract-OCR`.
+  * Asegúrate de que dentro de esa carpeta exista el archivo `tesseract.exe`.
+
+**El texto sale "basura" o caracteres extraños**
+
+  * Asegúrate de que la iluminación de la foto sea uniforme.
+  * El resaltador debe tener buen contraste. Los colores muy oscuros o fotos con sombras fuertes dificultan la creación de la máscara HSV.
 
 -----
 
 ## 🧑‍💻 Setup para Desarrolladores
 
-Si deseas modificar el código o compilar tu propia versión:
+Si deseas contribuir o modificar el código:
 
 ### 1\. Configuración del Entorno
 
@@ -108,7 +132,7 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-### 2\. Ejecución
+### 2\. Ejecución en Dev
 
 ```bash
 python main.py
@@ -116,14 +140,18 @@ python main.py
 
 ### 3\. Compilación (.exe)
 
-Comando para generar el ejecutable *single-file* (asegúrate de tener la carpeta `assets`):
+El proyecto incluye assets (imágenes). Asegúrate de incluirlos en la compilación:
 
 ```bash
-pyinstaller --onefile --noconsole --name ExtractorOCR --add-data "assets;assets" main.py
+pyinstaller --onefile --noconsole --name ExtractorOCR --add-data "assets;assets" --icon="assets/icon.ico" main.py
 ```
 
 -----
 
 ## ⚖️ Créditos
 
-Desarrollado por **Martín Ratti**. Proyecto de código abierto para facilitar la digitalización de documentos.
+Desarrollado por **Martín Ratti**.
+
+  * Iconos por [Flaticon](https://www.flaticon.com).
+  * Librerías: OpenCV, PyTesseract, CustomTkinter.
+
