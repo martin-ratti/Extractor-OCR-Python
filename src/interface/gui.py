@@ -164,7 +164,7 @@ class App(TkinterDnD.Tk):
         self.batch_button.grid(row=0, column=1, padx=5, pady=10)
         ctk.CTkLabel(self.top_frame, text="Color Resaltador:", font=self.FONT_BODY, text_color=self.COLOR_TEXT_SECONDARY).grid(row=0, column=2, padx=(15, 5), pady=10)
         self.color_var = ctk.StringVar(value="amarillo")
-        self.color_menu = ctk.CTkOptionMenu(self.top_frame, variable=self.color_var, values=["amarillo", "verde", "rosa", "violeta"], fg_color=self.COLOR_SECONDARY, button_color=self.COLOR_SECONDARY, button_hover_color=self.COLOR_SECONDARY_HOVER, **btn_style)
+        self.color_menu = ctk.CTkOptionMenu(self.top_frame, variable=self.color_var, values=["amarillo", "verde", "celeste", "azul", "violeta", "rosa", "naranja"], fg_color=self.COLOR_SECONDARY, button_color=self.COLOR_SECONDARY, button_hover_color=self.COLOR_SECONDARY_HOVER, **btn_style)
         self.color_menu.grid(row=0, column=3, padx=5, pady=10)
         self.help_button = ctk.CTkButton(self.top_frame, text="Ayuda (?)", command=self._show_help_window, fg_color=self.COLOR_SECONDARY, hover_color=self.COLOR_SECONDARY_HOVER, **btn_style)
         self.help_button.grid(row=0, column=4, padx=5, pady=10)

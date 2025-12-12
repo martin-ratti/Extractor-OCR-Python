@@ -24,15 +24,27 @@ class OcrService:
     Servicio OCR que detecta texto en zonas resaltadas con color.
     Incluye detección automática del ejecutable de Tesseract.
     """
-    DEBUG = False
+    DEBUG = False  # Modo de prueba desactivado para producción
 
     def __init__(self):
         # Rango HSV de cada color de resaltador
+        # HSV: Hue (0-180), Saturation (0-255), Value (0-255)
+        # Rangos calibrados basados en análisis de imágenes reales de documentos
         self.color_ranges: ColorRange = {
-            "amarillo": (np.array([15, 40, 60]), np.array([40, 255, 255])),
-            "verde": (np.array([40, 40, 40]), np.array([80, 255, 255])),
-            "rosa": (np.array([145, 60, 100]), np.array([175, 255, 255])),
-            "violeta": (np.array([125, 50, 50]), np.array([145, 255, 255])),
+            # Amarillo: Hue 22-38 (pico detectado en 30-40), separado de verde
+            "amarillo": (np.array([22, 25, 120]), np.array([38, 255, 255])),
+            # Verde: Hue 38-70 (pico detectado en 40-50), incluye verde lima
+            "verde": (np.array([38, 25, 120]), np.array([70, 255, 255])),
+            # Celeste/Turquesa: Hue 70-100, para resaltadores celestes/turquesa
+            "celeste": (np.array([70, 25, 120]), np.array([100, 255, 255])),
+            # Azul: Hue 100-120, para resaltadores azules
+            "azul": (np.array([100, 25, 120]), np.array([120, 255, 255])),
+            # Violeta: Hue 120-155, para resaltadores violeta/morado
+            "violeta": (np.array([120, 25, 120]), np.array([155, 255, 255])),
+            # Rosa: Hue 155-180 (pico detectado en 170-180), para rosas/magentas
+            "rosa": (np.array([155, 25, 120]), np.array([180, 255, 255])),
+            # Naranja: Hue 0-22 (pico detectado en 0-20), para naranja/salmón
+            "naranja": (np.array([0, 25, 120]), np.array([22, 255, 255])),
         }
 
         # --- DETECCIÓN AUTOMÁTICA DE TESSERACT ---

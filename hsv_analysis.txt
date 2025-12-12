@@ -1,0 +1,108 @@
+============================================================
+ANALISIS DE DISTRIBUCION HSV EN IMAGENES
+============================================================
+
+============================================================
+Analizando HSV: uploaded_image_0_1765565894986.jpg
+============================================================
+  Pixeles detectados como resaltador: 129,813
+
+  Distribucion de HUE (color):
+    H[  0- 10]:    2,634 ##
+    H[ 10- 20]:    7,574 #######
+    H[ 20- 30]:   16,878 ################
+    H[ 30- 40]:   90,214 ##################################################
+    H[100-110]:   12,236 ############
+    H[110-120]:      118 
+
+  Estadisticas:
+    Hue   - min:   0, max: 179, media: 36.3
+    Sat   - min:  26, max: 185, media: 77.8
+    Value - min: 101, max: 210, media: 162.4
+
+  -> Color predominante: AMARILLO (H=31)
+
+  ** Multiples colores detectados en rangos: [(0, 10), (10, 20), (20, 30), (30, 40), (100, 110)]
+
+============================================================
+Analizando HSV: uploaded_image_1_1765565894986.jpg
+============================================================
+  Pixeles detectados como resaltador: 110,667
+
+  Distribucion de HUE (color):
+    H[  0- 10]:    3,101 ###
+    H[ 10- 20]:   14,583 ##############
+    H[ 20- 30]:    9,419 #########
+    H[160-170]:      143 
+    H[170-180]:   83,410 ##################################################
+
+  Estadisticas:
+    Hue   - min:   0, max: 179, media: 135.6
+    Sat   - min:  26, max: 123, media: 49.8
+    Value - min: 101, max: 211, media: 169.6
+
+  -> Color predominante: ROSA/ROJO/NARANJA (H=174)
+
+  ** Multiples colores detectados en rangos: [(0, 10), (10, 20), (20, 30), (170, 180)]
+
+============================================================
+Analizando HSV: uploaded_image_2_1765565894986.jpg
+============================================================
+  Pixeles detectados como resaltador: 157,521
+
+  Distribucion de HUE (color):
+    H[  0- 10]:    1,042 #
+    H[160-170]:   15,809 ###############
+    H[170-180]:  140,644 ##################################################
+
+  Estadisticas:
+    Hue   - min:   0, max: 179, media: 170.4
+    Sat   - min:  26, max: 159, media: 52.9
+    Value - min: 101, max: 225, media: 178.2
+
+  -> Color predominante: ROSA/ROJO/NARANJA (H=172)
+
+  ** Multiples colores detectados en rangos: [(0, 10), (160, 170), (170, 180)]
+
+============================================================
+Analizando HSV: uploaded_image_3_1765565894986.jpg
+============================================================
+  Pixeles detectados como resaltador: 180,603
+
+  Distribucion de HUE (color):
+    H[ 10- 20]:      232 
+    H[ 20- 30]:    1,230 #
+    H[ 30- 40]:   10,321 ##########
+    H[ 40- 50]:  150,820 ##################################################
+    H[ 50- 60]:   11,403 ###########
+    H[140-150]:      648 
+    H[150-160]:    3,914 ###
+    H[160-170]:    1,991 #
+
+  Estadisticas:
+    Hue   - min:   8, max: 171, media: 49.1
+    Sat   - min:  26, max: 182, media: 75.2
+    Value - min: 101, max: 198, media: 165.0
+
+  -> Color predominante: VERDE (H=46)
+
+  ** Multiples colores detectados en rangos: [(20, 30), (30, 40), (40, 50), (50, 60), (150, 160), (160, 170)]
+
+============================================================
+Analizando HSV: uploaded_image_4_1765565894986.jpg
+============================================================
+  Pixeles detectados como resaltador: 135,410
+
+  Distribucion de HUE (color):
+    H[  0- 10]:   35,824 ###################################
+    H[ 10- 20]:   98,759 ##################################################
+    H[ 20- 30]:      808 
+
+  Estadisticas:
+    Hue   - min:   0, max: 179, media: 10.6
+    Sat   - min:  26, max: 172, media: 72.2
+    Value - min: 101, max: 237, media: 192.6
+
+  -> Color predominante: ROSA/ROJO/NARANJA (H=11)
+
+  ** Multiples colores detectados en rangos: [(0, 10), (10, 20)]

@@ -1,0 +1,62 @@
+============================================================
+ANALISIS DE DETECCION DE COLORES EN IMAGENES DE PRUEBA
+============================================================
+
+============================================================
+Analizando: uploaded_image_0_1765565894986
+============================================================
+  amarillo: 100,168 pixeles (12.70%) <<<
+  verde: 34 pixeles (0.00%)
+  rosa: 0 pixeles (0.00%)
+  violeta: 14 pixeles (0.00%)
+  naranja: 11,654 pixeles (1.48%)
+
+  MEJOR DETECCION: AMARILLO (12.70%)
+
+============================================================
+Analizando: uploaded_image_1_1765565894986
+============================================================
+  amarillo: 3,870 pixeles (0.49%)
+  verde: 0 pixeles (0.00%)
+  rosa: 83,364 pixeles (10.57%) <<<
+  violeta: 0 pixeles (0.00%)
+  naranja: 25,519 pixeles (3.24%)
+
+  MEJOR DETECCION: ROSA (10.57%)
+
+============================================================
+Analizando: uploaded_image_2_1765565894986
+============================================================
+  amarillo: 0 pixeles (0.00%)
+  verde: 0 pixeles (0.00%)
+  rosa: 155,203 pixeles (19.68%) <<<
+  violeta: 0 pixeles (0.00%)
+  naranja: 1,607 pixeles (0.20%)
+
+  MEJOR DETECCION: ROSA (19.68%)
+
+============================================================
+Analizando: uploaded_image_3_1765565894986
+============================================================
+  amarillo: 9,356 pixeles (1.19%) <<<
+  verde: 165,673 pixeles (21.01%) <<<
+  rosa: 4,184 pixeles (0.53%)
+  violeta: 3,998 pixeles (0.51%)
+  naranja: 580 pixeles (0.07%)
+
+  MEJOR DETECCION: VERDE (21.01%)
+
+============================================================
+Analizando: uploaded_image_4_1765565894986
+============================================================
+  amarillo: 1,735 pixeles (0.22%)
+  verde: 0 pixeles (0.00%)
+  rosa: 25 pixeles (0.00%)
+  violeta: 0 pixeles (0.00%)
+  naranja: 137,239 pixeles (17.41%) <<<
+
+  MEJOR DETECCION: NARANJA (17.41%)
+
+============================================================
+Analisis completado.
+============================================================
