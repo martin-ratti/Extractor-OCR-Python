@@ -43,8 +43,8 @@ class OcrService:
             "violeta": (np.array([120, 25, 120]), np.array([155, 255, 255])),
             # Rosa: Hue 155-180 (pico detectado en 170-180), para rosas/magentas
             "rosa": (np.array([155, 25, 120]), np.array([180, 255, 255])),
-            # Naranja: Hue 0-22 (pico detectado en 0-20), para naranja/salmón
-            "naranja": (np.array([0, 25, 120]), np.array([22, 255, 255])),
+            # Naranja: Hue 0-25 (pico detectado en ~11-12), rango bajo para incluir salmón/naranja oscuro
+            "naranja": (np.array([0, 25, 80]), np.array([25, 255, 255])),
         }
 
         # --- DETECCIÓN AUTOMÁTICA DE TESSERACT ---

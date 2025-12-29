@@ -1,0 +1,18 @@
+uploaded_image_0_1765565894986.jpg: Median=31.0, MaxBin=30-40
+Hist: [np.int64(397), np.int64(0), np.int64(6942), np.int64(87987), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(1), np.int64(2952), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(70)]
+uploaded_image_0_1766978650401.jpg: Median=11.0, MaxBin=10-20
+Hist: [np.int64(7216), np.int64(53781), np.int64(173), np.int64(0), np.int64(32), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(22), np.int64(2), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(267), np.int64(5)]
+uploaded_image_1_1765565894986.jpg: Median=174.0, MaxBin=170-180
+Hist: [np.int64(1373), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(60), np.int64(65468)]
+uploaded_image_1_1766978650401.jpg: Median=12.0, MaxBin=10-20
+Hist: [np.int64(1907), np.int64(41903), np.int64(0), np.int64(0), np.int64(267), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(207), np.int64(5), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0)]
+uploaded_image_2_1765565894986.jpg: Median=171.0, MaxBin=170-180
+Hist: [np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(9678), np.int64(74037)]
+uploaded_image_2_1766978650401.jpg: Median=12.0, MaxBin=10-20
+Hist: [np.int64(2626), np.int64(41048), np.int64(141), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(5), np.int64(1), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(28), np.int64(0)]
+uploaded_image_3_1765565894986.jpg: Median=46.0, MaxBin=40-50
+Hist: [np.int64(0), np.int64(0), np.int64(0), np.int64(2226), np.int64(132698), np.int64(8431), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0)]
+uploaded_image_3_1766978650401.jpg: Median=12.0, MaxBin=10-20
+Hist: [np.int64(1402), np.int64(14057), np.int64(1), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(2), np.int64(0)]
+uploaded_image_4_1765565894986.jpg: Median=11.0, MaxBin=10-20
+Hist: [np.int64(20118), np.int64(87845), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0), np.int64(0)]
