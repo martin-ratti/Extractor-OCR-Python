@@ -64,6 +64,43 @@ class OcrService:
         else:
             print("⚠️ No se encontró Tesseract. Coloca la carpeta 'Tesseract-OCR' junto al .exe o instálalo en Windows.")
 
+    def correct_orientation(self, image: np.ndarray) -> np.ndarray:
+        """
+        Detecta la orientación de la imagen y la rota si es necesario.
+        """
+        try:
+            # Usamos Tesseract OSD (Orientation and Script Detection)
+            # image_to_osd devuelve info como: "Rotate: 90\nOrientation in degrees: 90\n..."
+            osd_data = pytesseract.image_to_osd(image)
+            
+            rotation_angle = 0
+            # Parsear la salida texto de OSD
+            for line in osd_data.splitlines():
+                if "Rotate:" in line:
+                    rotation_angle = int(line.split(":")[1].strip())
+                    break
+            
+            if rotation_angle == 0:
+                return image
+
+            print(f"🔄 Auto-rotación detectada: {rotation_angle}°")
+
+            # Rotar la imagen según el ángulo detectado
+            if rotation_angle == 90:
+                image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+            elif rotation_angle == 180:
+                image = cv2.rotate(image, cv2.ROTATE_180)
+            elif rotation_angle == 270:
+                image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+            
+            return image
+
+        except Exception as e:
+            # Si falla OSD (ej. imagen sin suficiente texto para detectar orientación),
+            # devolvemos la original sin cambios.
+            # print(f"Info: No se pudo detectar orientación ({e})")
+            return image
+
     def extract_text_from_image(self, image_path: str, color: str) -> str:
         """Extrae texto de una imagen resaltada con el color especificado."""
         lower_bound, upper_bound = self.color_ranges.get(color, (None, None))
@@ -74,6 +111,10 @@ class OcrService:
             image = cv2.imread(image_path)
             if image is None:
                 return "Error: No se pudo cargar la imagen."
+
+            # --- NUEVO: Corregir orientación ---
+            image = self.correct_orientation(image)
+            # -----------------------------------
 
             hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(hsv_image, lower_bound, upper_bound)
