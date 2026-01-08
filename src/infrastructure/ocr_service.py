@@ -31,10 +31,10 @@ class OcrService:
         # HSV: Hue (0-180), Saturation (0-255), Value (0-255)
         # Rangos calibrados basados en análisis de imágenes reales de documentos
         self.color_ranges: ColorRange = {
-            # Amarillo: Hue 22-38 (pico detectado en 30-40), separado de verde
-            "amarillo": (np.array([22, 25, 120]), np.array([38, 255, 255])),
+            # Amarillo: Hue 22-45 (extendido para incluir amarillo lima), superpuesto con verde
+            "amarillo": (np.array([22, 25, 120]), np.array([45, 255, 255])),
             # Verde: Hue 38-70 (pico detectado en 40-50), incluye verde lima
-            "verde": (np.array([38, 25, 120]), np.array([70, 255, 255])),
+            "verde": (np.array([35, 25, 120]), np.array([85, 255, 255])),
             # Celeste/Turquesa: Hue 70-100, para resaltadores celestes/turquesa
             "celeste": (np.array([70, 25, 120]), np.array([100, 255, 255])),
             # Azul: Hue 100-120, para resaltadores azules
