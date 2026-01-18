@@ -26,20 +26,18 @@ ICONO_DROP_B64 = base64.b64decode(
     b'ijISFIn4gwpCF1G6iB6U6NJlF72J7gNB0yIa8kUUREZExEQw00JNSzSSzDA6g2NMzpnzvo/NoyI7jDNz4B94'
     b'eB+Hc8/97n/u+Z+7BwzDMAzDMAzDMAzDMAzDMAzDMAzDMAx/kGWs8BGxrgA8h/A+gDXCV4HUW8BWAL8AXgM4'
     b'A/gK4E8A/wT+A1ABWFXA3gC+x/gM8L3gVwFmA0gL/gC4G/AnANYBdhXwdcBfAasB/A04E/BLgH8BHgYMiQDP'
-    b'gY3wF8BLDODlwF4A/ixg+pPhf8C1gO0A3gBsBvgVcC/gy4AvA7YB+D7gdoDHgQ3wE8BLDPi14FuB+wB8GvB1'
-    b'wBMBm1E/BPgN4EHAhvgG8BLDFgB/A9wK2Abgx4GvAr4M2ApAPwfuAfAiwL7AbwBPMbQG/jHwG8A/BuwFkAT+'
-    b'AngQcCG+gHiJoRWAFwGHAfYEiAX+AnAuwLbA1wGHAyYEnhDwNcA/ALMBeA1gB2AtgE8AngA8CniMEX8EHArY'
-    b'C0AEWAN4GvAwwP4AfgZcC3glYC3glYC3wK8APgHYC9gEwNeAbwA+xJgTwC8A+wFo/gK4E3AoYCuA1wBWAx4E'
-    b'HAlgB2BPgN+AA4E/AvwMeB3gXcC/gMHAUQBvAN4AvAB4EnA44F3AV4BvAE8Bvgh4GvBZgH0BPgbcBPgY8BHA'
-    b'M4GvAG8B7AegBv+LgB8CjgfsBvAswA4AxwLuB3wU8HHAxwCvA/YAcCvgOcA/gE8AngI8BjgScAewB4Bf/B0A'
-    b'fgRcCdgH4O+BrwCeBbwO+BNgLQDd+H0AlwMuBexy5J8AfgM4FHD3gB9b5JcAjwL+DvBPgJsBeA/gIcBPAI8C'
-    b'jgLcCfgRYDfgRYBdgL0AfAxwI+CPgC8D3gK8Dngb8D7gC4AbAccDngf8EfAswL4Afg7sBPApwIuAewA8BvgI'
-    b'4GuAuwD8CbgT8BPA1wBHAxYCrgScB3yM8TvA3wKuAeyK8QfgM8BHAL8DvA7YD+DXgN8C/gqYDuBfwLGAzYAv'
-    b'AZ4G/AHgNsBbANcDbgf8GbAfgD8H3AZwG2BPgL8H3AG4G8A/AfcBeAXgFsA/Aj4D+DHgPzWl/wH4P+AvAfsB'
-    b'GIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZh/i9b9qQy0m5/JAAAAABJRU5ErkJggg=='
+    b'gY3wF8BLDFgB/A9wK2Abgx4GvAr4M2ApAPwfuAfAiwL7AbwBPMbQG/jHwG8A/BuwFkAT+AngQcCG+gHiJoRW'
+    b'AFwGHAfYEiAX+AnAuwLbA1wGHAyYEnhDwNcA/ALMBeA1gB2AtgE8AngA8CniMEX8EHAr4C9gEwNeAbwA+xJg'
+    b'TwC/A+wFo/gK4E3AoYCuA1wBWAx4EHAlgB2BPgN+AA4E/AvwMeB3gXcC/gMHAUQBvAN4AvAB4EnA44F3AV4B'
+    b'vAE8Bvgh4GvBZgH0BPgbcBPgY8BHAM8GvAG8B7AegBv+LgB8CjgfsBvAswA4AxwLuB3wU8HHAxwCvA/YAcCv'
+    b'gOcA/gE8AngI8BjgScAewB4Bf/B0AfgRcCdgH4O+BrwCeBbwO+BNgLQDd+H0AlwMuBexy5J8AfgM4FHD3gB9'
+    b'b5JcAjwL+DvBPgJsBeA/gIcBPAI8CjgLcCfgRYDfgRYBdgL0AfAxwI+CPgC8D3gK8Dngb8D7gC4AbAccDngf'
+    b'8EfAswL4Afg7sBPApwIuAewA8BvgI4GuAuwD8CbgT8BPA1wBHAxYCrgScB3yM8TvA3wKuAeyK8QfgM8BHAL8Dv'
+    b'A6YD+DXgN8C/gqYDuBfwLGAzYAvAZ4G/AHgNsBbANcDbgf8GbAfgD8H3AZwG2BPgL8H3AG4G8A/AfcBeAXgFs'
+    b'A/Aj4D+DHgPzWl/wH4P+AvAfsBGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZhGIZh/i9b9qQy0m5/JAAAAABJRU5ErkJggg=='
 )
 
-# [NUEVO] Clase auxiliar para crear tooltips
+# clase auxiliar para tooltips
 class Tooltip:
     def __init__(self, widget, text, bg_color):
         self.widget = widget
@@ -68,6 +66,9 @@ class Tooltip:
             self.tooltip_window.destroy()
         self.tooltip_window = None
 
+import ctypes
+from ctypes import windll
+
 class App(TkinterDnD.Tk):
     def __init__(self, ocr_service: OcrService):
         ctk.set_appearance_mode("Light")
@@ -89,7 +90,8 @@ class App(TkinterDnD.Tk):
         self.configure(bg=self.COLOR_BACKGROUND)
         self.overrideredirect(True)
         self.title("Extractor de Texto")
-        self.geometry("1200x750")
+        
+        self.geometry("1000x600")
 
         self.ocr_service = ocr_service
         self.batch_results: dict[str, str] = {}
@@ -101,8 +103,49 @@ class App(TkinterDnD.Tk):
         self.drop_target_register(DND_FILES)
         self.dnd_bind('<<Drop>>', self._on_drop)
         self._load_assets()
+        
+        self.minimize_functional_var = ctk.BooleanVar(value=True)
+        self.adjust_720p_var = ctk.BooleanVar(value=True)
+        self.show_taskbar_var = ctk.BooleanVar(value=True)
+        
+        self.adjust_720p_var.trace_add("write", self._on_720p_change)
+
         self._setup_ui()
         self.after(100, self._check_ocr_queue)
+        
+        self.after(200, self._set_taskbar_icon)
+
+    def _set_taskbar_icon(self):
+        """Hack para mostrar ventana en barra de tareas siendo frameless (overrideredirect=True)"""
+        try:
+            GWL_EXSTYLE = -20
+            WS_EX_APPWINDOW = 0x00040000
+            WS_EX_TOOLWINDOW = 0x00000080
+            
+            hwnd = windll.user32.GetParent(self.winfo_id())
+            style = windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
+            style = style & ~WS_EX_TOOLWINDOW
+            style = style | WS_EX_APPWINDOW
+            windll.user32.SetWindowLongW(hwnd, GWL_EXSTYLE, style)
+            
+            self.wm_withdraw()
+            self.after(10, self.wm_deiconify)
+        except Exception as e:
+            print(f"Advertencia: No se pudo configurar barra de tareas: {e}")
+
+    def _minimize_window(self):
+        self.withdraw()
+        self.overrideredirect(False)
+        self.iconify()
+        self.bind("<Map>", self._on_restore)
+        
+    def _on_restore(self, event):
+        self.overrideredirect(True)
+        self.unbind("<Map>")
+        
+    def _on_720p_change(self, *args):
+        if self.adjust_720p_var.get():
+            self.geometry("1000x600")
 
     def _load_assets(self):
         self.copy_icon = None
@@ -120,6 +163,12 @@ class App(TkinterDnD.Tk):
 
             drop_pil_image = Image.open(io.BytesIO(ICONO_DROP_B64))
             self.drop_icon = ctk.CTkImage(light_image=drop_pil_image, dark_image=drop_pil_image, size=(64, 64))
+            
+            if (assets_path / "app_icon.png").exists():
+                 app_icon = Image.open(assets_path / "app_icon.png")
+                 self.iconphoto(False, ctk.CTkImage(app_icon)._light_image)
+            else:
+                 self.iconphoto(False, drop_pil_image)
             
         except Exception as e:
             print(f"Advertencia: No se pudieron cargar los iconos: {e}")
@@ -162,12 +211,10 @@ class App(TkinterDnD.Tk):
         self.select_image_button.grid(row=0, column=0, padx=(10,5), pady=10)
         self.batch_button = ctk.CTkButton(self.top_frame, text="Procesar Carpeta", command=self._select_folder, fg_color=self.COLOR_PRIMARY, hover_color=self.COLOR_PRIMARY_HOVER, **btn_style)
         self.batch_button.grid(row=0, column=1, padx=5, pady=10)
-        ctk.CTkLabel(self.top_frame, text="Color Resaltador:", font=self.FONT_BODY, text_color=self.COLOR_TEXT_SECONDARY).grid(row=0, column=2, padx=(15, 5), pady=10)
-        self.color_var = ctk.StringVar(value="amarillo")
-        self.color_menu = ctk.CTkOptionMenu(self.top_frame, variable=self.color_var, values=["amarillo", "verde", "celeste", "azul", "violeta", "rosa", "naranja"], fg_color=self.COLOR_SECONDARY, button_color=self.COLOR_SECONDARY, button_hover_color=self.COLOR_SECONDARY_HOVER, **btn_style)
-        self.color_menu.grid(row=0, column=3, padx=5, pady=10)
+        
         self.help_button = ctk.CTkButton(self.top_frame, text="Ayuda (?)", command=self._show_help_window, fg_color=self.COLOR_SECONDARY, hover_color=self.COLOR_SECONDARY_HOVER, **btn_style)
-        self.help_button.grid(row=0, column=4, padx=5, pady=10)
+        self.help_button.grid(row=0, column=2, padx=5, pady=10)
+        
         self.extract_button = ctk.CTkButton(self.top_frame, text="Extraer Texto", command=self._start_ocr_process, state="disabled", fg_color=self.COLOR_PRIMARY, hover_color=self.COLOR_PRIMARY_HOVER, **btn_style)
         self.extract_button.grid(row=0, column=6, padx=(5, 10), pady=10)
 
@@ -323,7 +370,10 @@ class App(TkinterDnD.Tk):
         self._clear_file_list()
         self.progress_bar.pack(side="right", padx=15, pady=8, fill="x", expand=True)
         self.progress_bar.set(0)
-        thread = threading.Thread(target=self._ocr_batch_worker, args=(image_paths, self.color_var.get()), daemon=True)
+        
+        selected_color = "auto"
+        
+        thread = threading.Thread(target=self._ocr_batch_worker, args=(image_paths, selected_color), daemon=True)
         thread.start()
         
     def _ocr_batch_worker(self, image_paths, color):
@@ -394,7 +444,7 @@ class App(TkinterDnD.Tk):
     
     def _set_ui_state(self, state: str):
         is_normal = state == "normal"
-        for widget in [self.select_image_button, self.batch_button, self.color_menu, self.help_button]: widget.configure(state=state)
+        for widget in [self.select_image_button, self.batch_button, self.help_button]: widget.configure(state=state)
         
         self.extract_button.configure(state="normal" if is_normal and self.image_paths_to_process else "disabled")
         
@@ -492,18 +542,35 @@ class App(TkinterDnD.Tk):
         ctk.CTkLabel(self.help_win, text="Consejos para una Detección Exitosa", font=self.FONT_TITLE, text_color=self.COLOR_TEXT).grid(row=0, column=0, padx=20, pady=(20, 10))
         container = ctk.CTkFrame(self.help_win, fg_color=self.COLOR_BACKGROUND)
         container.grid(row=1, column=0, padx=20, pady=5, sticky="nsew")
-        help_text = ("\n💡 Para obtener los mejores resultados:\n\n   •  Iluminación uniforme y sin sombras.\n   •  Imagen nítida y bien enfocada.\n   •  Buen contraste entre texto y fondo.\n   •  Alta resolución para mayor precisión.\n")
+        help_text = ("\n💡 Para obtener los mejores resultados:\n\n   •  Iluminación uniforme y sin sombras.\n   •  •  Imagen nítida y bien enfocada.\n   •  •  Buen contraste entre texto y fondo.\n   •  •  Alta resolución para mayor precisión.\n")
         ctk.CTkLabel(container, text=help_text, font=self.FONT_BODY, justify="left", wraplength=480, text_color=self.COLOR_TEXT).pack(padx=15, pady=15, anchor="w")
         ctk.CTkButton(self.help_win, text="Entendido 💚", command=self.help_win.destroy, width=120, font=self.FONT_BUTTON, fg_color=self.COLOR_PRIMARY, hover_color=self.COLOR_PRIMARY_HOVER, text_color="white").grid(row=2, column=0, padx=20, pady=(10, 20))
+
+    def _minimize_window(self):
+        alpha = 1.0
+        for _ in range(10):
+            alpha -= 0.1
+            if alpha < 0: alpha = 0
+            self.attributes("-alpha", alpha)
+            self.update()
+            self.after(10)
+        self.withdraw()
+        self.overrideredirect(False)
+        self.iconify()
+        self.attributes("-alpha", 1.0)
+        self.bind("<Map>", self._on_restore)
+
+    def _toggle_maximize(self):
+        self.state('zoomed' if self.state() == 'normal' else 'normal')
 
     def _start_move(self, event): self.x, self.y = event.x, event.y
     def _do_move(self, event): self.geometry(f"+{self.winfo_x() + event.x - self.x}+{self.winfo_y() + event.y - self.y}")
     def _close_window(self): self.destroy()
-    def _minimize_window(self): self.iconify()
-    def _toggle_maximize(self): self.state('zoomed' if self.state() == 'normal' else 'normal')
 
 def main():
     ocr_service = OcrService()
     app = App(ocr_service=ocr_service)
     app.mainloop()
 
+if __name__ == "__main__":
+    main()

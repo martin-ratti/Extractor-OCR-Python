@@ -30,21 +30,25 @@ class OcrService:
         # Rango HSV de cada color de resaltador
         # HSV: Hue (0-180), Saturation (0-255), Value (0-255)
         # Rangos calibrados basados en análisis de imágenes reales de documentos
+        # Rango HSV de cada color de resaltador
+        # HSV: Hue (0-180), Saturation (0-255), Value (0-255)
+        # Rangos calibrados para ser EXCLUSIVOS y evitar solapamientos.
+        # Saturation Min subido a 50 para ignorar sombras grises y blancos sucios.
         self.color_ranges: ColorRange = {
-            # Amarillo: Hue 22-45 (extendido para incluir amarillo lima), superpuesto con verde
-            "amarillo": (np.array([22, 25, 120]), np.array([45, 255, 255])),
-            # Verde: Hue 38-70 (pico detectado en 40-50), incluye verde lima
-            "verde": (np.array([35, 25, 120]), np.array([85, 255, 255])),
-            # Celeste/Turquesa: Hue 70-100, para resaltadores celestes/turquesa
-            "celeste": (np.array([70, 25, 120]), np.array([100, 255, 255])),
-            # Azul: Hue 100-120, para resaltadores azules
-            "azul": (np.array([100, 25, 120]), np.array([120, 255, 255])),
-            # Violeta: Hue 120-155, para resaltadores violeta/morado
-            "violeta": (np.array([120, 25, 120]), np.array([155, 255, 255])),
-            # Rosa: Hue 155-180 (pico detectado en 170-180), para rosas/magentas
-            "rosa": (np.array([155, 25, 120]), np.array([180, 255, 255])),
-            # Naranja: Hue 0-25 (pico detectado en ~11-12), rango bajo para incluir salmón/naranja oscuro
-            "naranja": (np.array([0, 25, 80]), np.array([25, 255, 255])),
+            # Naranja: 0-18 (Antes 0-25)
+            "naranja": (np.array([0, 50, 80]), np.array([18, 255, 255])),
+            # Amarillo: 19-35 (Antes 22-45, evitando verde)
+            "amarillo": (np.array([19, 50, 120]), np.array([35, 255, 255])),
+            # Verde: 36-90 (Antes 35-85, rango principal)
+            "verde": (np.array([36, 50, 120]), np.array([90, 255, 255])),
+            # Celeste: 91-110
+            "celeste": (np.array([91, 50, 120]), np.array([110, 255, 255])),
+            # Azul: 111-125
+            "azul": (np.array([111, 50, 120]), np.array([125, 255, 255])),
+            # Violeta: 126-160
+            "violeta": (np.array([126, 50, 120]), np.array([160, 255, 255])),
+            # Rosa: 161-180
+            "rosa": (np.array([161, 50, 120]), np.array([180, 255, 255])),
         }
 
         # --- DETECCIÓN AUTOMÁTICA DE TESSERACT ---
@@ -101,38 +105,160 @@ class OcrService:
             # print(f"Info: No se pudo detectar orientación ({e})")
             return image
 
-    def extract_text_from_image(self, image_path: str, color: str) -> str:
-        """Extrae texto de una imagen resaltada con el color especificado."""
-        lower_bound, upper_bound = self.color_ranges.get(color, (None, None))
-        if lower_bound is None:
-            return f"Error: Color '{color}' no soportado."
+    def detect_active_colors(self, image: np.ndarray) -> list[str]:
+        """
+        Analiza la imagen para determinar qué colores de resaltado están presentes.
+        Usa un umbral dinámico basado en el tamaño de la imagen y un umbral relativo
+        para filtrar falsos positivos (ruido).
+        """
+        hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        height, width, _ = image.shape
+        total_pixels = height * width
+        
+        # Umbral 1: Área mínima absoluta (0.2% de la imagen)
+        # Para una foto de 12MP (4000x3000), esto es ~24,000 píxeles.
+        # Para 720p (1280x720), esto es ~1,800 píxeles.
+        MIN_AREA_PERCENT = 0.002 
+        min_pixels_absolute = int(total_pixels * MIN_AREA_PERCENT) # Aumentamos umbral significativamente
 
+        detected_stats = {}
+
+        for color_name, (lower, upper) in self.color_ranges.items():
+            mask = cv2.inRange(hsv_image, lower, upper)
+            
+            # Dilatar máscara para conectar puntos dispersos antes de contar
+            # Revertido a solo dilatación simple para no perder detalles finos
+            kernel = np.ones((5,5), np.uint8)
+            # mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel) # ELIMINADO: Comía demasiado texto
+            mask = cv2.dilate(mask, kernel, iterations=2)
+
+            count = cv2.countNonZero(mask)
+            
+            if count > min_pixels_absolute:
+                detected_stats[color_name] = count
+        
+        if not detected_stats:
+            return []
+
+        # Umbral 2: Relativo al color dominante
+        # Si el verde tiene 100,000 px y el violeta (sombra) tiene 5,000, ignoramos el violeta.
+        max_pixels = max(detected_stats.values())
+        RELATIVE_THRESHOLD = 0.20 # Debe tener al menos el 20% de píxeles del color dominante
+        
+        final_colors = []
+        for color, count in detected_stats.items():
+            if count >= max_pixels * RELATIVE_THRESHOLD:
+                final_colors.append(color)
+            elif self.DEBUG:
+                print(f"⚠️ Color '{color}' descartado por ser minoritario ({count} px vs {max_pixels} px)")
+
+        return final_colors
+
+    def extract_text_from_image(self, image_path: str, color: str = "auto") -> str:
+        """
+        Método ÚNICO de extracción inteligente.
+        1. Intenta detectar colores de resaltado.
+        2. Si encuentra colores, extrae el texto de esas zonas.
+        3. Si NO encuentra colores, escanea toda la página con estrategia robusta (Smart Fallback).
+        """
         try:
             image = cv2.imread(image_path)
             if image is None:
                 return "Error: No se pudo cargar la imagen."
 
-            # --- NUEVO: Corregir orientación ---
+            # --- Corregir orientación ---
             image = self.correct_orientation(image)
-            # -----------------------------------
+            # ---------------------------
 
-            hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-            mask = cv2.inRange(hsv_image, lower_bound, upper_bound)
-            if self.DEBUG: cv2.imwrite(f"_debug_01_mask_{color}.png", mask)
+            # Paso 1: Intentar detección de colores (Modo Resaltador)
+            active_colors = self.detect_active_colors(image)
+            
+            if active_colors:
+                text_from_colors = self._extract_highlighted_text(image, active_colors)
+                if text_from_colors:
+                    return text_from_colors
+                # Si detectó colores pero no pudo leer texto, caer al fallback
+                if self.DEBUG: print("⚠️ Colores detectados pero sin texto legible. Intentando escaneo completo...")
 
-            kernel = np.ones((3, 15), np.uint8)
-            dilated_mask = cv2.dilate(mask, kernel, iterations=3)
-            if self.DEBUG: cv2.imwrite(f"_debug_02_dilated_mask_{color}.png", dilated_mask)
-
-            gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            _, thresh_image = cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY_INV)
-            final_image = cv2.bitwise_and(thresh_image, thresh_image, mask=dilated_mask)
-            if self.DEBUG: cv2.imwrite(f"_debug_03_final_image_{color}.png", final_image)
-
-            config = '-l spa+eng --psm 6'
-            texto_extraido = pytesseract.image_to_string(final_image, config=config)
-
-            return texto_extraido.strip() or "No se encontró texto en las áreas resaltadas."
+            # Paso 2: Fallback a Escaneo Completo (Modo "Sin Filtro" Robusto)
+            return self._extract_full_page_robust(image)
 
         except Exception as e:
-            return f"Ocurrió un error durante el OCR: {e}"
+            return f"Ocurrió un error considerable durante el OCR: {e}"
+
+    def _extract_highlighted_text(self, image: np.ndarray, active_colors: list) -> str:
+        """Extrae texto solo de las zonas de los colores especificados."""
+        hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        _, thresh_image = cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY_INV)
+        
+        kernel_connect = np.ones((3, 15), np.uint8) # Para conectar letras horizontalmente
+        kernel_clean = np.ones((5, 5), np.uint8)    # Para eliminar ruido
+
+        config = '-l spa+eng --psm 6'
+
+        final_output = []
+        for color_name in active_colors:
+            lower, upper = self.color_ranges[color_name]
+            mask = cv2.inRange(hsv_image, lower, upper)
+            
+            # 1. Limpieza de ruido ELIMINADA para recuperar calidad de texto
+            # cleaned_mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel_clean)
+            
+            # 2. Solo Dilatación para cubrir letras (usamos la mask original)
+            dilated_mask = cv2.dilate(mask, kernel_connect, iterations=3)
+            
+            final_image_part = cv2.bitwise_and(thresh_image, thresh_image, mask=dilated_mask)
+            
+            text_part = pytesseract.image_to_string(final_image_part, config=config).strip()
+            
+            # Filtrar basura muy corta (menos de 3 letras suele ser ruido)
+            if text_part and len(text_part) > 3:
+                header = f"{color_name.upper()}:"
+                final_output.append(f"{header}\n\n{text_part}")
+        
+        if final_output:
+            return "\n\n" + ("-"*30) + "\n\n".join(final_output)
+        return ""
+
+    def _extract_full_page_robust(self, image: np.ndarray) -> str:
+        """Intenta leer la página completa usando múltiples estrategias de pre-procesamiento."""
+        configs_to_try = [
+            # Intento 1: Pre-procesamiento AVANZADO (Mejor para sombras/curvatura)
+            ("Avanzado", lambda img: self._preprocess_advanced(img), '-l spa+eng --psm 3'),
+            # Intento 2: Pre-procesamiento MÍNIMO (Mejor para luz uniforme)
+            ("Mínimo", lambda img: self._preprocess_minimal(img), '-l spa+eng --psm 3'),
+            # Intento 3: Raw (Sin tocar)
+            ("Raw", lambda img: img, '-l spa+eng --psm 3'),
+             # Intento 4: PSM 6 Fallback
+            ("Bloque", lambda img: self._preprocess_minimal(img), '-l spa+eng --psm 6')
+        ]
+
+        for name, preprocess_func, cfg in configs_to_try:
+            try:
+                processed_img = preprocess_func(image)
+                text = pytesseract.image_to_string(processed_img, config=cfg).strip()
+                if len(text) > 15: # Umbral mínimo de éxito
+                    if self.DEBUG: print(f"✅ Éxito con estrategia: {name}")
+                    return text
+            except Exception as e:
+                if self.DEBUG: print(f"⚠️ Falló estrategia {name}: {e}")
+                continue
+        
+        return "No se encontró texto legible en la imagen (Intento fallido en todos los modos)."
+
+    def _preprocess_advanced(self, image):
+        """CLAHE + Denoise + Adaptive Threshold"""
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        enhanced = clahe.apply(gray)
+        denoised = cv2.fastNlMeansDenoising(enhanced, None, 10, 7, 21)
+        binary = cv2.adaptiveThreshold(denoised, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+        return binary
+
+    def _preprocess_minimal(self, image):
+        """Grayscale + Slight Blur"""
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        return cv2.GaussianBlur(gray, (3, 3), 0)
+
+
