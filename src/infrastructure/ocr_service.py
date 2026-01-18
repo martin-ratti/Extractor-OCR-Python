@@ -162,9 +162,14 @@ class OcrService:
         3. Si NO encuentra colores, escanea toda la página con estrategia robusta (Smart Fallback).
         """
         try:
-            image = cv2.imread(image_path)
+            # image = cv2.imread(image_path) # Reemplazado por versión safe para unicode
+            image = self._read_image_safe(image_path)
+            
             if image is None:
-                return "Error: No se pudo cargar la imagen."
+                # Intento de debug adicional: verificar si el archivo existe
+                if not os.path.exists(image_path):
+                     return f"Error: No se encuentra el archivo en la ruta: {image_path}"
+                return "Error: No se pudo cargar la imagen (formato no soportado o ruta inválida)."
 
             # --- Corregir orientación ---
             image = self.correct_orientation(image)
@@ -260,5 +265,20 @@ class OcrService:
         """Grayscale + Slight Blur"""
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         return cv2.GaussianBlur(gray, (3, 3), 0)
+
+    def _read_image_safe(self, path: str) -> np.ndarray:
+        """
+        Lee una imagen soportando rutas con caracteres Unicode/especiales en Windows.
+        cv2.imread falla silenciosamente con rutas que tienen acentos o caracteres no ASCII.
+        """
+        try:
+            # np.fromfile lee el archivo binario sin importar el nombre
+            stream = np.fromfile(path, dtype=np.uint8)
+            # cv2.imdecode decodifica el buffer de memoria a imagen OpenCV
+            image = cv2.imdecode(stream, cv2.IMREAD_COLOR)
+            return image
+        except Exception as e:
+            if self.DEBUG: print(f"Error en _read_image_safe: {e}")
+            return None
 
 
